@@ -4,15 +4,14 @@ plugins {
 
 android {
     namespace 'kr.opencourse.gorotation'
-    compileSdkVersion 33
-    buildToolsVersion "33.0.0"
+    compileSdk 33
 
     defaultConfig {
         applicationId "kr.opencourse.gorotation"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1"
 
         resValue "string", "xposed_description", "Go Daijishou - LG Second Launcher to Rotate Screen by Husband of Rebekah"
         //resValue "string-array", "xposed_scope", "com.lge.secondlauncher"
@@ -22,6 +21,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // 디버그 키로 서명 - 키스토어 관리 없이 설치 가능한 APK 생성
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
