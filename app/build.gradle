@@ -10,7 +10,7 @@ android {
         applicationId "kr.opencourse.gorotation"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 3
+        versionCode 4
         versionName "1.1"
 
         resValue "string", "xposed_description", "Go Daijishou - LG Second Launcher to Rotate Screen by Husband of Rebekah"
