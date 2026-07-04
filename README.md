@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/jshsakura/GoRotation90/blob/main/app/sampledata/gocat90.png?raw=true" width="180" style="border-radius: 20px;"/>
+</div>
+
 **🧙‍♂️ Go Rotation 90 Xposed Module Project.**
 
 ### GoRotation90
