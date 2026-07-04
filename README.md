@@ -6,26 +6,44 @@
 
 ### GoRotation90
 
-이 Xposed 모듈은 루팅된 LG Wing 스마트폰의 세컨드 런처 화면의 회전기능을 추가합니다.
+이 Xposed 모듈은 루팅된 LG Wing 스마트폰에서 **자동회전 토글을 회전 트리거**로 사용해 화면 방향을 강제합니다.
 
-윙의 두 번째 런처인 `com.lge.secondlauncher`의 로테이션 설정을 바꿔치기 하기 때문에 예기치 않은 부작용을 일으킬 수 있습니다.
+- 자동회전 **OFF** → 가로(90°) 고정
+- 자동회전 **ON** → 세로(0°) 고정
 
-성능 영향: updateRotationUnchecked 메서드가 호출될 때마다 추가 로직이 실행되므로, 미세하지만 성능에 영향을 줄 수 있습니다.
+시스템 프레임워크의 `DisplayRotation.rotationForOrientation`을 후킹해 회전 계산 결과를 토글 상태에 따라 강제하고, 토글이 바뀌는 순간 ContentObserver가 회전 재평가를 즉시 트리거하므로 지연 없이 바로 회전됩니다.
 
-배터리 소모: 지속적인 회전 체크와 설정 변경으로 인해 배터리 소모가 증가할 수 있습니다.
+동작 방식은 전부 **이벤트 기반**입니다. 폴링이나 지속적인 체크는 없으며, 회전 이벤트가 발생할 때만 후킹 로직이 실행되고 설정값 읽기도 SettingsProvider 클라이언트 캐시를 사용하므로 성능·배터리 영향은 사실상 없습니다.
 
-호환성 문제: 일부 앱들은 특정 화면 방향을 강제로 요구할 수 있는데, 이 모듈이 그러한 요구를 무시할 수 있습니다.
+#### 설치
 
-이 모듈은 LG Wing에 특화되어 있어, 다른 기기에서는 제대로 작동하지 않거나 문제를 일으킬 수 있습니다.
+1. APK 설치 ([Releases](https://github.com/jshsakura/GoRotation90/releases)에서 다운로드)
+2. LSPosed에서 모듈 활성화 — 스코프는 **System Framework(android)** 만 필요
+3. 재부팅
 
-This Xposed module adds rotation functionality to the second launcher screen of a rooted LG Wing smartphone.
+#### 주의 사항
 
-By overriding the rotation settings of Wing's second launcher, com.lge.secondlauncher, it may cause unexpected side effects.
+- 회전을 시스템 차원에서 강제하므로, 특정 방향을 요구하는 앱의 요청을 무시할 수 있습니다.
+- 이 모듈은 LG Wing에 특화되어 있어 다른 기기에서는 제대로 작동하지 않거나 문제를 일으킬 수 있습니다.
 
-Performance impact: Additional logic is executed every time the updateRotationUnchecked method is called, which may have a slight impact on performance.
+---
 
-Battery consumption: Continuous rotation checks and setting changes may increase battery consumption.
+This Xposed module for rooted LG Wing smartphones uses the **auto-rotate toggle as a rotation trigger** to force the screen orientation.
 
-Compatibility issues: Some apps may forcefully require a specific screen orientation, which this module might override.
+- Auto-rotate **OFF** → locked to landscape (90°)
+- Auto-rotate **ON** → locked to portrait (0°)
 
-This module is specifically designed for the LG Wing and may not function properly or cause issues on other devices.
+It hooks `DisplayRotation.rotationForOrientation` in the system framework to force the computed rotation based on the toggle state, and a ContentObserver triggers an immediate rotation re-evaluation the moment the toggle changes, so the screen rotates without delay.
+
+Everything is **event-driven**. There is no polling or continuous checking — the hook logic only runs on rotation events, and settings reads hit the SettingsProvider client-side cache, so the performance and battery impact is effectively zero.
+
+#### Installation
+
+1. Install the APK (download from [Releases](https://github.com/jshsakura/GoRotation90/releases))
+2. Enable the module in LSPosed — only the **System Framework (android)** scope is required
+3. Reboot
+
+#### Caveats
+
+- Since rotation is forced at the system level, apps that require a specific orientation may have their requests overridden.
+- This module is specifically designed for the LG Wing and may not function properly or cause issues on other devices.
